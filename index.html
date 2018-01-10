@@ -1,0 +1,51 @@
+<!DOCtype html>
+<html>
+    <head>
+        <title>Rock, Paper, Scissors Multiplayer</title>
+    
+        <link href="./assets/css/style.css" rel="stylesheet">
+        
+        <style>
+        </style>
+
+     
+    
+    </head>
+
+    <body>   
+        
+        <!-- jQuery link -->
+        <script type = "text/javascript" src ="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- Javascript link -->
+        <script type = "text/javascript" src = "./assets/javascript/javascript.js"></script>
+       
+        <!-- Firebase Link -->
+        <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+        <script>
+        // Initialize Firebase
+            var config = {
+            apiKey: "AIzaSyCAIt42NvpFwzSNogdJvFTMUeHNf-jPxWY",
+            authDomain: "rock-paper-scissors-mp-79a33.firebaseapp.com",
+            databaseURL: "https://rock-paper-scissors-mp-79a33.firebaseio.com",
+            projectId: "rock-paper-scissors-mp-79a33",
+            storageBucket: "",
+            messagingSenderId: "153941745547"
+        };
+        firebase.initializeApp(config);
+        </script>
+
+
+
+        <div class = "chat-log"></div>
+
+        <form>
+            <span class = "chat-box">Say something: 
+                <input class = "chat" type = "text"> 
+                <input class = "add-chat" value = "Send" type = "submit"> 
+            </span>
+        </form>
+        
+        
+    </body>
+
+</html>
