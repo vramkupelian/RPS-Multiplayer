@@ -110,7 +110,7 @@ $(".add-name").on("click", function(event){
         //Clear textbox when done
         $(".chat").val("");
 
-        database.ref().push({
+        database.ref().update({
             chat: userChat,
         });
     
@@ -127,9 +127,17 @@ $(".add-name").on("click", function(event){
                    $(".p1-name").append(newName).append(winCount).append(lossCount);
  
         }
-        else{
+        else if ($(".p2-name").is(":empty")){
             $(".p2-name").append(newName).append(winCount).append(lossCount);
+        }
+        else{
+            
         }
     });
 
+    //when they choose rock, paper or scissors.
+$("button").on("click",function(){
     
+
+
+});
