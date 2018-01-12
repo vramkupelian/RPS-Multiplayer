@@ -10,6 +10,8 @@ var config = {
 firebase.initializeApp(config);
    
 var database = firebase.database();
+
+var myTurn;
 // var connections = database.ref("connections");
 // console.log(connections);
 
@@ -30,7 +32,6 @@ var database = firebase.database();
 //     losses:0,
 //     choice:"",
 // }
-
 
 //Adding names, only 2 people
 $(".add-name").on("click", function(event){
@@ -63,7 +64,7 @@ $(".add-name").on("click", function(event){
             //     });
             
             // user1 = userName;
-            database.ref().push({
+            database.ref("Player1").update({
                 user: userName,
                 wins: 0,
                 losses: 0,
@@ -74,7 +75,7 @@ $(".add-name").on("click", function(event){
             else if($(".p2-name").is(":empty")){
                 
                 // user1 = userName;
-                database.ref().push({
+                database.ref("Player2").update({
                     user: userName,
                     wins: 0,
                     losses: 0,
@@ -89,8 +90,16 @@ $(".add-name").on("click", function(event){
 
         //Clear textbox when done
         $(".name").val("");   
+        $(".name-form").addClass("hidden");
+
 });
 
+//if there are p1 and p2, hide name form
+if (!$(".p1-name").is(":empty") && !$(".p2-name").is(":empty")){
+
+    $(".name-form").addClass("hidden");
+
+}
 //chat
     $(".add-chat").on("click", function(event){
         //prevents refresh on form submission
@@ -105,12 +114,12 @@ $(".add-name").on("click", function(event){
         chatItem.append(userChat);
 
         //Add <p> to chat-log
-        $(".chat-log").append(chatItem);
+        // $(".chat-log").append(chatItem);
 
         //Clear textbox when done
         $(".chat").val("");
 
-        database.ref().update({
+        database.ref("chat").update({
             chat: userChat,
         });
     
@@ -131,13 +140,21 @@ $(".add-name").on("click", function(event){
             $(".p2-name").append(newName).append(winCount).append(lossCount);
         }
         else{
-            
+            var trashTalk = $("<p>").text(snapshot.val().chat);
+            $(".chat-log").append(trashTalk);
         }
     });
 
     //when they choose rock, paper or scissors.
-$("button").on("click",function(){
+$("input:button").on("click",function(){
     
+console.log("You clicked a button");
+console.log($(this).val());
 
+var myChoice = $(this).val();
+
+database.ref("Player1").update({
+    choice: myChoice,
+});
 
 });
