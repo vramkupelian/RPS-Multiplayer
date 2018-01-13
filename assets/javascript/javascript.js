@@ -18,6 +18,7 @@ var connectionsRef = database.ref("/connections");
 // '.info/connected' is a special location provided by Firebase that is updated every time
 // the client's connection state changes.
 // '.info/connected' is a boolean value, true if the client is connected and false if they are not.
+
 var connectedRef = database.ref(".info/connected");
 console.log("connectedRef: " + connectedRef);
 var myTurn;
@@ -41,7 +42,6 @@ connectedRef.on("value", function(snap){
 
 });
 
-
 database.ref().on("value", function(snapshot){
 
 const player1exists = snapshot.child("Player1").exists();
@@ -54,6 +54,28 @@ if(player1exists && player2exists){
 
 });
 
+database.ref().on("value", function(snapshot){
+console.log(snapshotToArray(snapshot));
+
+});
+
+var returnArr = [];
+
+function snapshotToArray(snapshot){
+
+    // var returnArr = [];
+
+    snapshot.forEach(function(childSnapshot){
+        var item = childSnapshot.val();
+        item.key = childSnapshot.key;
+
+        returnArr.push(item);
+
+    });
+    
+    return returnArr;
+}
+console.log(returnArr);
 // database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
 //     var snapValue = snapshot.val();
 
@@ -164,12 +186,14 @@ if (!$(".p1-name").is(":empty") && !$(".p2-name").is(":empty")){
 $("input:button").on("click",function(){
     
 console.log("You clicked a button");
-console.log($(this).val());
 
 var myChoice = $(this).val();
 
-database.ref("Player1").update({
+//need to make if/else once I can find out who is who
+database.ref("/players/Player1").update({
     choice: myChoice,
 });
+
+
 
 });
