@@ -11,27 +11,35 @@ firebase.initializeApp(config);
    
 var database = firebase.database();
 
+// connectionsRef references a specific location in our database.
+// All of our connections will be stored in this directory.
+var connectionsRef = database.ref("/connections");
+
+// '.info/connected' is a special location provided by Firebase that is updated every time
+// the client's connection state changes.
+// '.info/connected' is a boolean value, true if the client is connected and false if they are not.
+var connectedRef = database.ref(".info/connected");
+
 var myTurn;
-// var connections = database.ref("connections");
-// console.log(connections);
 
 // database.ref().on("value" , function(snapshot){
 // // user1 = snapshot.val().
 // });
 
-// var user1 ={
-//     name:"",
-//     wins: 0,
-//     losses: 0,
-//     choice: "",
-// }
+//When client's connection state changes
+connectedRef.on("value", function(snap){
+    
+    //If they are connected
+    if(snap.val()){
 
-// var user2 ={
-//     name:"",
-//     wins: 0,
-//     losses:0,
-//     choice:"",
-// }
+        //Add user to connections list
+        var isConnected = connectionsRef.push(true);
+        
+        //Remove user from connection list when they disconnect
+        isConnected.onDisconnect().remove();
+    }
+
+});
 
 //Adding names, only 2 people
 $(".add-name").on("click", function(event){
