@@ -19,7 +19,7 @@ var connectionsRef = database.ref("/connections");
 // the client's connection state changes.
 // '.info/connected' is a boolean value, true if the client is connected and false if they are not.
 var connectedRef = database.ref(".info/connected");
-
+console.log("connectedRef: " + connectedRef);
 var myTurn;
 
 // database.ref().on("value" , function(snapshot){
@@ -41,6 +41,26 @@ connectedRef.on("value", function(snap){
 
 });
 
+
+database.ref().on("value", function(snapshot){
+
+const player1exists = snapshot.child("Player1").exists();
+const player2exists = snapshot.child("Player2").exists();
+
+if(player1exists && player2exists){
+
+    $(".name-form").addClass("hidden");
+}
+
+});
+
+// database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
+//     var snapValue = snapshot.val();
+
+//     console.log(snapValue.dateAdded);
+// });
+
+
 //Adding names, only 2 people
 $(".add-name").on("click", function(event){
         //prevents refresh on form submission
@@ -56,45 +76,30 @@ $(".add-name").on("click", function(event){
         nameItem.append(userName);
 
         //If there is no final player, add name
-        // if(!$("p").hasClass("final-player")){
         if($(".p1-name").is(":empty")){
             console.log("P1 is empty,lets add");
-            // if($("p").hasClass("player")){
-            //     $(".p2-name").append(nameItem);
-            //     $("p").addClass("final-player");
-            //     user2 = userName;
-
-            //     database.ref().push({
-            //         user: userName,
-            //         wins:0,
-            //         losses: 0,
-            //         choice:"",
-            //     });
-            
+                
             // user1 = userName;
-            database.ref("Player1").update({
+            database.ref("/players/Player1").update({
                 user: userName,
                 wins: 0,
                 losses: 0,
                 choice:"",
+                // dateAdded: firebase.database.ServerValue.TIMESTAMP
             });
 
             }
             else if($(".p2-name").is(":empty")){
                 
                 // user1 = userName;
-                database.ref("Player2").update({
+                database.ref("/players/Player2").update({
                     user: userName,
                     wins: 0,
                     losses: 0,
                     choice:"",
+                    // dateAdded: firebase.database.ServerValue.TIMESTAMP
                 });
             }
-        // }
-        // else{
-        //     $(".name").val("");
-        //     return;
-        // }
 
         //Clear textbox when done
         $(".name").val("");   
@@ -108,6 +113,7 @@ if (!$(".p1-name").is(":empty") && !$(".p2-name").is(":empty")){
     $(".name-form").addClass("hidden");
 
 }
+
 //chat
     $(".add-chat").on("click", function(event){
         //prevents refresh on form submission
@@ -134,8 +140,9 @@ if (!$(".p1-name").is(":empty") && !$(".p2-name").is(":empty")){
     });
 
     //retrieve from database
-    database.ref().on("child_added", function(snapshot){
+    database.ref("/players").on("child_added", function(snapshot){
 
+        console.log(snapshot);
         var newName = $("<p>").text("Player: " + snapshot.val().user);
         var winCount = $("<p>").text("Wins: " + snapshot.val().wins);
         var lossCount = $("<p>").text("Losses: " + snapshot.val().losses);
