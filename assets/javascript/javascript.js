@@ -23,6 +23,8 @@ var connectedRef = database.ref(".info/connected");
 console.log("connectedRef: " + connectedRef);
 var myTurn;
 
+
+var playerKey ="";
 // database.ref().on("value" , function(snapshot){
 // // user1 = snapshot.val().
 // });
@@ -35,12 +37,17 @@ connectedRef.on("value", function(snap){
 
         //Add user to connections list
         var isConnected = connectionsRef.push(true);
-        
+        isConnected.onDisconnect().remove();
+        console.log(snap.val());
+        console.log(isConnected.key);
+        playerKey = isConnected.key;
+        console.log(playerKey);
         //Remove user from connection list when they disconnect
         isConnected.onDisconnect().remove();
     }
 
 });
+
 
 database.ref().on("value", function(snapshot){
 
@@ -102,11 +109,12 @@ $(".add-name").on("click", function(event){
             console.log("P1 is empty,lets add");
                 
             // user1 = userName;
-            database.ref("/players/Player1").update({
+            database.ref("/players/" + playerKey).update({
                 user: userName,
                 wins: 0,
                 losses: 0,
                 choice:"",
+                id: playerKey,
                 // dateAdded: firebase.database.ServerValue.TIMESTAMP
             });
 
@@ -114,11 +122,12 @@ $(".add-name").on("click", function(event){
             else if($(".p2-name").is(":empty")){
                 
                 // user1 = userName;
-                database.ref("/players/Player2").update({
+                database.ref("/players/" + playerKey).update({
                     user: userName,
                     wins: 0,
                     losses: 0,
                     choice:"",
+                    id: playerKey,
                     // dateAdded: firebase.database.ServerValue.TIMESTAMP
                 });
             }
@@ -190,7 +199,7 @@ console.log("You clicked a button");
 var myChoice = $(this).val();
 
 //need to make if/else once I can find out who is who
-database.ref("/players/Player1").update({
+database.ref("/players/" + playerKey).update({
     choice: myChoice,
 });
 
